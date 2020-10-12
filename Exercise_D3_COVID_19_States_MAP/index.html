@@ -71,18 +71,9 @@
         cases_extent[0] = 1
         let colorScale = d3.scaleLog().domain(cases_extent).range(["white","maroon"]).interpolate(d3.interpolateCubehelix.gamma(1));
         let mapCanvas = svg.append('g')
-        mapCanvas.selectAll('path')
-            .data(geoJson)
-            .enter()
-            .append('path')
-            .attr("class","path_geo")
-            .attr("d",geo_generator)
-            .attr("fill","white")
+        mapCanvas.selectAll('path').data(geoJson).enter().append('path').attr("class","path_geo").attr("d",geo_generator).attr("fill","white")
             .on("mousemove",function(mouseData,d){
-                d3.select('#tooltip')
-                .style("opacity",.8)
-                .style("left",(mouseData.clientX+10).toString()+"px")
-                .style("left",(mouseData.clientY+10).toString()+"px")
+                d3.select('#tooltip').style("opacity",.8).style("left",(mouseData.clientX+10).toString()+"px").style("left",(mouseData.clientY+10).toString()+"px")
                 .html(
                     "<div class='tooltipData'>State: "+covid_data.get(d.properties.GEOID)[0].state+"</div>" +
                     "<div class='tooltipData' style='color:Black'>Date: "+covid_data.get(d.properties.GEOID)[0].date.toString()+"</div>" +
@@ -96,11 +87,7 @@
                     "<div class='tooltipData' style='color:red'>Confirmed_Deaths: "+covid_data.get(d.properties.GEOID)[0].confirmed_deaths.toString()+"</div>" +
                     "<div class='tooltipData'></div>")
 
-            })
-            .transition()
-            .delay(function (d,i){return i*2})
-            .duration(2000)
-            .style("fill",function(d){
+            }).transition().delay(function (d,i){return i*2}).duration(2000).style("fill",function(d){
                 try{
                     return colorScale(parseInt(covid_data.get(d.properties.GEOID)[0].cases));
                 }
@@ -109,10 +96,7 @@
                     return "white"
                 }
             })
-        svg.call(d3.zoom()
-            .extent([[0,0],[1000,800]])
-            .scaleExtent([1,8])
-            .on("zoom",zoomed)
+        svg.call(d3.zoom().extent([[0,0],[1000,800]]).scaleExtent([1,8]).on("zoom",zoomed)
         )
         function zoomed({transform}){
             mapCanvas.attr("transform",transform)
